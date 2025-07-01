@@ -1,3 +1,5 @@
+const fetch = require('node-fetch');
+
 app.get('/api/search', async (req, res) => {
   const { q, resource } = req.query;
   if (!q || !resource) return res.status(400).json({ error: 'Missing q or resource' });

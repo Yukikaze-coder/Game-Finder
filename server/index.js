@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
 const favoritesRouter = require('./routes/favorites');
-const fetch = require('node-fetch');
 
 
 const admin = require('firebase-admin');
