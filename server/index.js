@@ -3,8 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
 const favoritesRouter = require('./routes/favorites');
-
-
+const authenticateToken = require('./auth'); 
 const admin = require('firebase-admin');
 
 const serviceAccount = {
@@ -71,3 +70,27 @@ app.get('/api/search', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+app.get('/api/game/:id', async (req, res) => {
+  const id = req.params.id;
+  try {
+    const apiKey = process.env.GIANTBOMB_API_KEY;
+    const url = `https://www.giantbomb.com/api/game/${id}/?api_key=${apiKey}&format=json`;
+    const response = await fetch(url, { headers: { 'User-Agent': 'GameFinderApp/1.0' } });
+    const data = await response.json();
+
+    // Log the full API response
+    console.log("GIANTBOMB API RESPONSE:", JSON.stringify(data, null, 2));
+
+    if (data && data.results) {
+      res.json({ results: data.results });
+    } else {
+      console.log("No results found for id:", id); // Log for debugging
+      res.status(404).json({ error: 'Game not found' });
+    }
+  } catch (err) {
+    console.error("ERROR in /api/game/:id:", err); // THIS LOG IS IMPORTANT!
+    res.status(500).json({ error: err.message });
+  }
+});
+

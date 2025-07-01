@@ -13,3 +13,18 @@ app.get('/api/search', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+app.get('/api/game/:id', async (req, res) => {
+  const { id } = req.params;
+  const apiKey = process.env.GIANTBOMB_API_KEY;
+  try {
+    const url = `https://www.giantbomb.com/api/game/${id}/?api_key=${apiKey}&format=json`;
+    const response = await fetch(url, {
+      headers: { 'User-Agent': 'GameFinderApp/1.0' }
+    });
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});

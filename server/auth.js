@@ -1,3 +1,5 @@
+const admin = require('firebase-admin'); 
+
 async function authenticateToken(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -12,8 +14,12 @@ async function authenticateToken(req, res, next) {
       email: decoded.email,
       name: decoded.name || null
     };
+  
   } catch (err) {
+    
     req.user = null;
   }
   next();
 }
+
+module.exports = authenticateToken;
