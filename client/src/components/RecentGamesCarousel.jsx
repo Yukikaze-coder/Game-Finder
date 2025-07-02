@@ -11,7 +11,7 @@ export default function RecentGamesCarousel() {
     // Use a common word to get a large list
     api
       .get("/search", {
-        params: { q: "the", resource: "game" },
+        params: { q: "console", resource: "game" },
       })
       .then((res) => setGames((res.data.results || []).slice(0, 50)))
       .catch(() => setGames([]));

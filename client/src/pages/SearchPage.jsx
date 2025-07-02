@@ -68,17 +68,29 @@ export default function SearchPage() {
               src={game.image.medium_url}
               alt={game.name}
               className="rounded-lg mb-4 w-full max-w-sm mx-auto object-cover"
-              style={{ maxHeight: 350 }}
+              style={{ maxHeight: 500, maxWidth: 500 }}
             />
           )}
-          {/* Save to Favorites button */}
-          <button
-            className="btn btn-outline btn-secondary btn-sm mb-2"
-            onClick={handleFavorite}
-            disabled={saving}
-          >
-            {saving ? "Saving..." : "Save to Favorites"}
-          </button>
+          {/* Save to Favorites and Source buttons */}
+          <div className="flex gap-2 mb-2">
+            <button
+              className="btn btn-outline btn-secondary btn-sm"
+              onClick={handleFavorite}
+              disabled={saving}
+            >
+              {saving ? "Saving..." : "❤️ Save to Favorites"}
+            </button>
+            {game.site_detail_url && (
+              <a
+                href={game.site_detail_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-outline btn-info btn-sm"
+              >
+                🔗Link
+              </a>
+            )}
+          </div>
         </div>
 
         <div className="mt-2 w-full">
