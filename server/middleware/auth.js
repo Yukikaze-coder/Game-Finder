@@ -1,10 +1,10 @@
 const admin = require('firebase-admin'); 
 
 async function authenticateToken(req, res, next) {
-  const authHeader = req.headers.authorization;
+  const authHeader = req.headers['authorization'];
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     req.user = null;
-    return next();
+    return res.status(401).json({ error: 'Unauthorized' });
   }
   const token = authHeader.split(' ')[1];
   try {
@@ -14,12 +14,11 @@ async function authenticateToken(req, res, next) {
       email: decoded.email,
       name: decoded.name || null
     };
-  
+    next();
   } catch (err) {
-    
     req.user = null;
+    return res.status(401).json({ error: 'Unauthorized' });
   }
-  next();
 }
 
 module.exports = authenticateToken;

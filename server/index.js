@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
 const favoritesRouter = require('./routes/favorites');
-const authenticateToken = require('./auth'); 
+const authenticateToken = require('./middleware/auth'); 
 const admin = require('firebase-admin');
 
 const serviceAccount = {
@@ -20,19 +20,18 @@ const serviceAccount = {
   universe_domain: process.env.FIREBASE_UNIVERSE_DOMAIN,
 };
 
-
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
-
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
-app.use('/api/favorites', favoritesRouter);
 
+// Secure all /api/favorites routes with authentication middleware
+app.use('/api/favorites', authenticateToken, favoritesRouter);
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -51,10 +50,6 @@ app.get('/api/test-db', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
 });
 
 app.get('/api/search', async (req, res) => {
@@ -79,18 +74,21 @@ app.get('/api/game/:id', async (req, res) => {
     const response = await fetch(url, { headers: { 'User-Agent': 'GameFinderApp/1.0' } });
     const data = await response.json();
 
-    // Log the full API response
+    
     console.log("GIANTBOMB API RESPONSE:", JSON.stringify(data, null, 2));
 
     if (data && data.results) {
       res.json({ results: data.results });
     } else {
-      console.log("No results found for id:", id); // Log for debugging
+      console.log("No results found for id:", id); 
       res.status(404).json({ error: 'Game not found' });
     }
   } catch (err) {
-    console.error("ERROR in /api/game/:id:", err); // THIS LOG IS IMPORTANT!
+    console.error("ERROR in /api/game/:id:", err); 
     res.status(500).json({ error: err.message });
   }
 });
 
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});

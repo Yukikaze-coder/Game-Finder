@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { AuthProvider } from "./contexts/AuthContext";
+import FavoritesPage from "./pages/FavoritesPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/game/:id" element={<SearchPage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/favorites" element={<FavoritesPage />} />
             </Routes>
           </main>
           <Footer />

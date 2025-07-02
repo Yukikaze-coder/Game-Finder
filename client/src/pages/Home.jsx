@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import { api } from '../api';
 import SearchBar from '../components/SearchBar';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Home() {
+  const { currentUser } = useAuth(); 
+
   const [query, setQuery] = useState('');
   const [resource, setResource] = useState('game');
   const [results, setResults] = useState([]);
@@ -24,10 +27,24 @@ export default function Home() {
 
   const handleFavorite = async (item) => {
     try {
-      await api.post('/favorites', {
-        game_id: item.id,
-        game_name: item.name,
-      });
+      if (!currentUser) {
+        alert('Please log in to save favorites.');
+        return;
+      }
+      // Always get a fresh ID token from Firebase Auth
+      const token = await currentUser.getIdToken();
+      await api.post(
+        '/favorites',
+        {
+          game_id: item.id,
+          game_name: item.name,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       alert('Game saved to favorites!');
     } catch (err) {
       if (err.response?.status === 401) {
@@ -61,7 +78,7 @@ export default function Home() {
                   {item.name}
                 </Link>
               </h2>
-              
+
               {item.image?.medium_url && (
                 <Link to={`/game/${item.guid}`}>
                   <img

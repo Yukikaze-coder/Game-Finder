@@ -21,7 +21,14 @@ export default function Navbar() {
   return (
     <>
       <nav className="navbar bg-base-100 px-12 shadow-md">
-        <div className="flex-1">
+        <div className="flex-1 flex justify-center">
+          {currentUser && (
+            <Link to="/favorites" className="btn btn-ghost mx-auto">
+              Favorites
+            </Link>
+          )}
+        </div>
+        <div className="absolute left-0 pl-4 flex items-center h-full">
           <Link to="/">
             <img
               src={gamefinderLogo}
