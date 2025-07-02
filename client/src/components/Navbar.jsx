@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import gamefinderLogo from "../assets/gamefinder.png"; 
 import UserDropdown from "./UserDropDown";
 import { Link } from "react-router-dom";
+import NavbarSearch from "./NavbarSearch";
 
 export default function Navbar() {
   const { currentUser, logout } = useAuth();
@@ -21,13 +22,15 @@ export default function Navbar() {
   return (
     <>
       <nav className="navbar bg-base-100 px-12 shadow-md">
+        {/* Favorites link */}
         <div className="flex-1 flex justify-center">
           {currentUser && (
-            <Link to="/favorites" className="btn btn-ghost mx-auto">
+            <Link to="/favorites" className="btn btn-ghost ml-25">
               Favorites
             </Link>
           )}
         </div>
+        {/* Logo */}
         <div className="absolute left-0 pl-4 flex items-center h-full">
           <Link to="/">
             <img
@@ -38,7 +41,9 @@ export default function Navbar() {
             />
           </Link>
         </div>
-        <div className="flex-none gap-2">
+        {/* Magnifying glass + user controls */}
+        <div className="flex items-center gap-2">
+          <NavbarSearch />
           {!currentUser ? (
             <>
               <button
@@ -70,7 +75,6 @@ export default function Navbar() {
           )}
         </div>
       </nav>
-
       {showAuthModal && (
         <AuthModal
           mode={authMode}

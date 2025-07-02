@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { api } from '../api';
 import SearchBar from '../components/SearchBar';
 import { useAuth } from '../contexts/AuthContext';
+import RecentGamesCarousel from "../components/RecentGamesCarousel";
 
 export default function Home() {
   const { currentUser } = useAuth(); 
@@ -65,7 +66,8 @@ export default function Home() {
         loading={loading}
         handleSearch={handleSearch}
       />
-
+      {/* Recent games carousel */}
+      <RecentGamesCarousel />
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {results.map(item => (
           <div key={item.id} className="card card-bordered mb-4 shadow-md">

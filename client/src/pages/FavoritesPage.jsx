@@ -104,7 +104,7 @@ export default function FavoritesPage() {
                   className="btn btn-error btn-sm mt-2"
                   onClick={() => handleRemove(fav.game_id)}
                 >
-                  Remove from Favorites
+                  Remove
                 </button>
               </div>
             </div>

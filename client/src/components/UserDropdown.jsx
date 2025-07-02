@@ -38,14 +38,14 @@ export default function UserDropdown({ user, avatarUrl, isGoogleUser, handleLogo
           </div>
           <span className="font-semibold text-sm">{user.displayName || user.email}</span>
         </div>
+        <li>
+          <Link to="/favorites">Favorites</Link>
+        </li>
         {!isGoogleUser && (
           <li>
             <button onClick={() => navigate("/profile")}>Profile Settings</button>
           </li>
         )}
-        {/* <li>
-          <Link to="/favorites">Favorites</Link>
-        </li> */}
         <li>
           <button onClick={handleLogout}>Sign Out</button>
         </li>

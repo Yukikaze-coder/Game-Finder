@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
 import { api } from '../api';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function SearchPage() {
   const { id } = useParams();
+  const { currentUser } = useAuth();
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const fetchGame = async () => {
@@ -20,6 +23,37 @@ export default function SearchPage() {
     };
     fetchGame();
   }, [id]);
+
+  const handleFavorite = async () => {
+    if (!currentUser) {
+      alert('Please log in to save favorites.');
+      return;
+    }
+    setSaving(true);
+    try {
+      const token = await currentUser.getIdToken();
+      await api.post(
+        '/favorites',
+        {
+          game_id: game.id,
+          game_name: game.name,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert('Game saved to favorites!');
+    } catch (err) {
+      if (err.response?.status === 401) {
+        alert('Please log in to save favorites.');
+      } else {
+        alert('Error saving favorite.');
+      }
+    }
+    setSaving(false);
+  };
 
   if (loading) return <div className="text-center py-16">Loading game info...</div>;
   if (!game) return <div className="text-center py-16 text-error">Game not found.</div>;
@@ -37,6 +71,14 @@ export default function SearchPage() {
               style={{ maxHeight: 350 }}
             />
           )}
+          {/* Save to Favorites button */}
+          <button
+            className="btn btn-outline btn-secondary btn-sm mb-2"
+            onClick={handleFavorite}
+            disabled={saving}
+          >
+            {saving ? "Saving..." : "Save to Favorites"}
+          </button>
         </div>
 
         <div className="mt-2 w-full">
