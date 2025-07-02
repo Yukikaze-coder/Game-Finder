@@ -77,7 +77,7 @@ export default function SearchPage() {
               __html: (game.description || game.deck || "No description.")
                 .replace(
                   /<img /g,
-                  '<img style="display:block;margin-left:auto;margin-right:auto;max-width:100%;" '
+                  '<img style="display:block;max-width:100%;" class="rounded-lg" '
                 ),
             }}
           />

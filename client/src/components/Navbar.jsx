@@ -3,7 +3,7 @@ import AuthModal from "./AuthModal";
 import { useAuth } from "../contexts/AuthContext";
 import gamefinderLogo from "../assets/gamefinder.png"; 
 import UserDropdown from "./UserDropDown";
-import { Link } from "react-router-dom"; // Add this import
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const { currentUser, logout } = useAuth();

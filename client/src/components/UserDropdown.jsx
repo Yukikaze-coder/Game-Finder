@@ -12,7 +12,7 @@ export default function UserDropdown({ user, avatarUrl, isGoogleUser, handleLogo
           <img
             src={avatarUrl}
             alt="avatar"
-            className="object-cover w-full h-full"
+            className="object-cover w-full h-full rounded-2xl"
             onError={(e) => {
               e.currentTarget.src = userLogo;
             }}
@@ -29,7 +29,7 @@ export default function UserDropdown({ user, avatarUrl, isGoogleUser, handleLogo
               <img
                 src={avatarUrl}
                 alt="avatar"
-                className="object-cover w-full h-full"
+                className="object-cover w-full h-full rounded-2xl"
                 onError={(e) => {
                   e.currentTarget.src = userLogo;
                 }}

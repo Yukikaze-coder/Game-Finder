@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import { api } from '../api';
+import SearchBar from '../components/SearchBar';
 
 export default function Home() {
   const [query, setQuery] = useState('');
@@ -39,29 +40,14 @@ export default function Home() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <form onSubmit={handleSearch} className="flex flex-col gap-4 max-w-xl mx-auto">
-        <input
-          className="input input-bordered w-full"
-          type="text"
-          value={query}
-          onChange={e => setQuery(e.target.value)}
-          placeholder="Search games, characters, companies..."
-          required
-        />
-        <select
-          className="select select-bordered"
-          value={resource}
-          onChange={e => setResource(e.target.value)}
-        >
-          <option value="game">Games</option>
-          <option value="character">Characters</option>
-          <option value="company">Companies</option>
-          <option value="concept">Concepts</option>
-        </select>
-        <button className="btn btn-primary" type="submit" disabled={loading}>
-          {loading ? "Searching..." : "Search"}
-        </button>
-      </form>
+      <SearchBar
+        query={query}
+        setQuery={setQuery}
+        resource={resource}
+        setResource={setResource}
+        loading={loading}
+        handleSearch={handleSearch}
+      />
 
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {results.map(item => (
