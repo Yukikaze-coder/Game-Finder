@@ -20,13 +20,13 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="navbar bg-base-100 px-4 shadow-md">
+      <nav className="navbar bg-base-100 px-12 shadow-md">
         <div className="flex-1">
-          <Link to="/"> {/* Wrap logo in Link */}
+          <Link to="/">
             <img
               src={gamefinderLogo}
               alt="Game Finder Logo"
-              style={{ height: "80px", width: "120px", maxHeight: "150px", maxWidth: "150px", cursor: "pointer" }}
+              style={{ height: "100px", width: "220px", maxHeight: "150px", maxWidth: "150px", cursor: "pointer" }}
               className="inline-block mr-2"
             />
           </Link>
