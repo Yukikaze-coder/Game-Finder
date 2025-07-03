@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const VISIBLE = 20;
 const IMAGE_WIDTH = 250;
 
-export default function RecentGamesCarousel() {
+export default function Carousel() {
   const [games, setGames] = useState([]);
   const [index, setIndex] = useState(0);
   const intervalRef = useRef(null);
@@ -32,7 +32,7 @@ export default function RecentGamesCarousel() {
     intervalRef.current = setInterval(() => {
       setIndex((prev) => prev + 1);
       transitionRef.current = true;
-    }, 2000); // smoother, slower speed
+    }, 2000); 
     return () => clearInterval(intervalRef.current);
   }, [games.length]);
 
@@ -42,7 +42,7 @@ export default function RecentGamesCarousel() {
       setTimeout(() => {
         transitionRef.current = false;
         setIndex(0);
-      }, 500); // match transition duration
+      }, 700); 
     }
   }, [index, games.length]);
 

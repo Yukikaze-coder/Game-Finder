@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { api } from '../api';
 import SearchBar from '../components/SearchBar';
 import { useAuth } from '../contexts/AuthContext';
-import RecentGamesCarousel from "../components/RecentGamesCarousel";
+import RecentGamesCarousel from "../components/Carousel";
 
 export default function Home() {
   const { currentUser } = useAuth(); 
