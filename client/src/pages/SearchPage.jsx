@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { api } from '../api';
 import { useAuth } from '../contexts/AuthContext';
+import RelatedGames from "../components/RelatedGames";
 
 export default function SearchPage() {
   const { id } = useParams();
@@ -9,6 +10,7 @@ export default function SearchPage() {
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [relatedGames, setRelatedGames] = useState([]);
 
   useEffect(() => {
     const fetchGame = async () => {
@@ -16,8 +18,27 @@ export default function SearchPage() {
       try {
         const res = await api.get(`/game/${id}`);
         setGame(res.data.results || null);
+
+        
+        if (res.data.results?.similar_games?.length) {
+          const related = await Promise.all(
+            res.data.results.similar_games.map(async (g) => {
+              try {
+                
+                const detail = await api.get(`/game/${g.id}`);
+                return detail.data.results;
+              } catch {
+                return g; 
+              }
+            })
+          );
+          setRelatedGames(related);
+        } else {
+          setRelatedGames([]);
+        }
       } catch {
         setGame(null);
+        setRelatedGames([]);
       }
       setLoading(false);
     };
@@ -68,10 +89,10 @@ export default function SearchPage() {
               src={game.image.medium_url}
               alt={game.name}
               className="rounded-lg mb-4 w-full max-w-sm mx-auto object-cover"
-              style={{ maxHeight: 500, maxWidth: 500 }}
+              style={{ maxHeight: 700, maxWidth: 500 }}
             />
           )}
-          {/* Save to Favorites and Source buttons */}
+          
           <div className="flex gap-2 mb-2">
             <button
               className="btn btn-outline btn-secondary btn-sm"
@@ -136,6 +157,7 @@ export default function SearchPage() {
             }}
           />
         </div>
+        <RelatedGames relatedGames={relatedGames} />
       </div>
     </div>
   );

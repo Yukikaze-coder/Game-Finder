@@ -2,86 +2,107 @@ import React, { useEffect, useRef, useState } from "react";
 import { api } from "../api";
 import { Link } from "react-router-dom";
 
+const VISIBLE = 20;
+const IMAGE_WIDTH = 250;
+
 export default function RecentGamesCarousel() {
   const [games, setGames] = useState([]);
   const [index, setIndex] = useState(0);
   const intervalRef = useRef(null);
+  const transitionRef = useRef(true);
 
   useEffect(() => {
-    // Use a common word to get a large list
     api
       .get("/search", {
-        params: { q: "console", resource: "game" },
+        params: { q: "fantasy", resource: "game" },
       })
-      .then((res) => setGames((res.data.results || []).slice(0, 50)))
+      .then((res) =>
+        setGames(
+          (res.data.results || [])
+            .filter((g) => g.image?.medium_url)
+            .slice(0, 24)
+        )
+      )
       .catch(() => setGames([]));
   }, []);
 
+  // Infinite loop logic
   useEffect(() => {
     if (!games.length) return;
     intervalRef.current = setInterval(() => {
-      setIndex((prev) => (prev + 1) % games.length);
-    }, 3000);
+      setIndex((prev) => prev + 1);
+      transitionRef.current = true;
+    }, 2000); // smoother, slower speed
     return () => clearInterval(intervalRef.current);
   }, [games.length]);
+
+  // When reaching the duplicated slides, reset without transition for seamless loop
+  useEffect(() => {
+    if (index === games.length) {
+      setTimeout(() => {
+        transitionRef.current = false;
+        setIndex(0);
+      }, 500); // match transition duration
+    }
+  }, [index, games.length]);
 
   const handleMouseEnter = () => clearInterval(intervalRef.current);
   const handleMouseLeave = () => {
     if (!games.length) return;
     intervalRef.current = setInterval(() => {
-      setIndex((prev) => (prev + 1) % games.length);
-    }, 3000);
+      setIndex((prev) => prev + 1);
+      transitionRef.current = true;
+    }, 2000);
   };
 
   if (!games.length) return null;
 
+  // Duplicate slides for infinite effect
+  const extendedGames = [...games, ...games.slice(0, VISIBLE)];
+  const translateX = -(index * IMAGE_WIDTH);
+
   return (
     <div
-      className="carousel w-full rounded-xl mt-10 shadow-lg bg-base-200"
+      className="w-full overflow-hidden rounded-xl mt-10 shadow-lg bg-base-200"
+      style={{ height: 220 }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {games.map((game, i) => (
-        <div
-          key={game.id}
-          className={`carousel-item relative w-full transition-all duration-700 ${
-            i === index ? "block" : "hidden"
-          }`}
-          style={{ height: 320 }}
-        >
-          <Link to={`/game/${game.guid}`} className="w-full flex flex-col items-center">
+      <div
+        className="flex"
+        style={{
+          width: `${(games.length + VISIBLE) * IMAGE_WIDTH}px`,
+          transform: `translateX(${translateX}px)`,
+          transition: transitionRef.current
+            ? "transform 0.7s cubic-bezier(0.4,0,0.2,1)"
+            : "none",
+        }}
+      >
+        {extendedGames.map((game, i) => (
+          <Link
+            key={game.id + "-" + i}
+            to={`/game/${game.guid}`}
+            className="block"
+            style={{
+              minWidth: IMAGE_WIDTH,
+              maxWidth: IMAGE_WIDTH,
+              height: 220,
+              overflow: "hidden",
+              borderRadius: "1rem",
+              marginRight: 12,
+              background: "#181e2a",
+            }}
+          >
             <img
-              src={game.image?.medium_url}
+              src={game.image.medium_url}
               alt={game.name}
-              className="w-full h-60 object-contain rounded-lg mx-auto"
-              style={{ background: "#20283c" }}
+              className="w-full h-full object-cover"
+              style={{ display: "block", borderRadius: "1rem" }}
+              loading="lazy"
             />
-            <div className="mt-3 font-bold text-base text-center text-base-content">
-              {game.name}
-            </div>
           </Link>
-          <div className="absolute left-3 right-3 top-1/2 flex -translate-y-1/2 transform justify-between">
-            <button
-              className="btn btn-circle btn-sm"
-              onClick={e => {
-                e.stopPropagation();
-                setIndex((index - 1 + games.length) % games.length);
-              }}
-            >
-              ❮
-            </button>
-            <button
-              className="btn btn-circle btn-sm"
-              onClick={e => {
-                e.stopPropagation();
-                setIndex((index + 1) % games.length);
-              }}
-            >
-              ❯
-            </button>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

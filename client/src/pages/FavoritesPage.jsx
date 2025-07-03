@@ -140,7 +140,7 @@ export default function FavoritesPage() {
                   )}
                 </div>
                 <button
-                  className="btn btn-error btn-xs mt-2 px-3"
+                  className="btn btn-error mt-2 px-3"
                   style={{ minWidth: "60px" }}
                   onClick={() => handleRemove(fav.game_id)}
                 >

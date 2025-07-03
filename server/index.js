@@ -5,6 +5,8 @@ const { Pool } = require('pg');
 const favoritesRouter = require('./routes/favorites');
 const authenticateToken = require('./middleware/auth'); 
 const admin = require('firebase-admin');
+const rawgRouter = require('./routes/rawg');
+
 
 const serviceAccount = {
   type: process.env.FIREBASE_TYPE,
@@ -29,6 +31,8 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+
+app.use('/api/rawg', rawgRouter);
 
 // Secure all /api/favorites routes with authentication middleware
 app.use('/api/favorites', authenticateToken, favoritesRouter);

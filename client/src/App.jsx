@@ -13,7 +13,7 @@ function App() {
     <AuthProvider>
       <div className="min-h-screen flex flex-col bg-base-200">
         <BrowserRouter>
-          <Navbar />
+          <Navbar className="sticky top-0 z-50" />
           <main className="flex-1">
             <Routes>
               <Route path="/" element={<Home />} />

@@ -58,6 +58,11 @@ export default function Home() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* Recent games carousel */}
+      <RecentGamesCarousel />
+      {/* Add margin below the carousel */}
+      <div className="mb-8" />
+      {/* Search bar below the carousel */}
       <SearchBar
         query={query}
         setQuery={setQuery}
@@ -66,8 +71,6 @@ export default function Home() {
         loading={loading}
         handleSearch={handleSearch}
       />
-      {/* Recent games carousel */}
-      <RecentGamesCarousel />
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {results.map(item => (
           <div key={item.id} className="card card-bordered mb-4 shadow-md">

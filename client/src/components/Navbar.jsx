@@ -21,12 +21,12 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="navbar bg-base-100 px-12 shadow-md">
+      <nav className="navbar bg-blue-100 px-12 shadow-md sticky top-0 z-50">
         {/* Favorites link */}
         <div className="flex-1 flex justify-center">
           {currentUser && (
-            <Link to="/favorites" className="btn btn-ghost ml-25">
-              Favorites
+            <Link to="/favorites" className="btn btn-ghost ml-28" style={{ fontWeight: 700, fontSize: "1.15rem", letterSpacing: "0.04em" }}>
+              ⭐Favorites
             </Link>
           )}
         </div>
