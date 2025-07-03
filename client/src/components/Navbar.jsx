@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import AuthModal from "./AuthModal";
 import { useAuth } from "../contexts/AuthContext";
 import gamefinderLogo from "../assets/gamefinder.png"; 
-import UserDropdown from "./UserDropDown";
+import UserDropdown from "./UserDropdown";
 import { Link } from "react-router-dom";
 import NavbarSearch from "./NavbarSearch";
 
